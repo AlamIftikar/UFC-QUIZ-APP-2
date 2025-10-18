@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFC Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #e03e2d;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .answers {
+            list-style: none;
+            padding: 0;
+        }
+        .answers li {
+            background: #e03e2d;
+            color: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .answers li:hover {
+            background: #c72c24;
+        }
+        .result {
+            display: none;
+            text-align: center;
+        }
+        .btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 15px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>UFC Quiz App</h1>
+        <div class="quiz">
+            <div class="question"></div>
+            <ul class="answers"></ul>
+            <button class="btn" id="next-btn">Next Question</button>
+        </div>
+        <div class="result">
+            <h2>Your Score: <span id="score"></span></h2>
+            <button class="btn" id="restart-btn">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Who is known as 'The Notorious'?",
+                answers: ["Conor McGregor", "Khabib Nurmagomedov", "Dustin Poirier", "Max Holloway"],
+                correct: 0
+            },
+            {
+                question: "Which fighter has the most title defenses in UFC history?",
+                answers: ["Anderson Silva", "Georges St-Pierre", "Jon Jones", "Amanda Nunes"],
+                correct: 1
+            },
+            {
+                question: "What year was the UFC founded?",
+                answers: ["1993", "2000", "1985", "1997"],
+                correct: 0
+            },
+            {
+                question: "Who was the first female champion in the UFC?",
+                answers: ["Ronda Rousey", "Amanda Nunes", "Joanna Jedrzejczyk", "Miesha Tate"],
+                correct: 0
+            },
+            {
+                question: "Which UFC fighter is known as 'The Spider'?",
+                answers: ["Israel Adesanya", "Anderson Silva", "Jon Jones", "Chuck Liddell"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionElement = document.querySelector('.question');
+        const answersElement = document.querySelector('.answers');
+        const nextButton = document.getElementById('next-btn');
+        const resultElement = document.querySelector('.result');
+        const scoreElement = document.getElementById('score');
+        const restartButton = document.getElementById('restart-btn');
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            nextButton.style.display = 'block';
+            resultElement.style.display = 'none';
+            showQuestion(questions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            questionElement.innerText = question.question;
+            answersElement.innerHTML = '';
+            question.answers.forEach((answer, index) => {
+                const li = document.createElement('li');
+                li.innerText = answer;
+                li.addEventListener('click', () => selectAnswer(index));
+                answersElement.appendChild(li);
+            });
+        }
+
+        function selectAnswer(index) {
+            if (index === questions[currentQuestionIndex].correct) {
+                score++;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                showQuestion(questions[currentQuestionIndex]);
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            nextButton.style.display = 'none';
+            resultElement.style.display = 'block';
+            scoreElement.innerText = `${score} out of ${questions.length}`;
+        }
+
+        nextButton.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length) {
+                showQuestion(questions[currentQuestionIndex]);
+            }
+        });
+
+        restartButton.addEventListener('click', startQuiz);
+
+        startQuiz();
+    </script>
+</body>
+</html>
